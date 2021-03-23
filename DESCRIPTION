@@ -3,9 +3,9 @@ Title: EPAGRI App
 Version: 0.0.0.9000
 Authors@R: c(person('Cristiane Hayumi', 'Taniguti', email = 'chtaniguti@usp.br', role = c('cre', 'aut')),
              person('Jenifer Camila', 'Godoy dos Santos', email = 'godoycamilajds@usp.br', role = c('aut')),
-             person('Kaio', 'Olimpio das Graças Dias', email = 'kaioolimpio@usp.br', role = c('cre', 'aut')),
-             person('Wellingson', 'Assunção Araújo', email = 'wellingson.araujo@usp.br', role = c('cre', 'aut')),
-             person('Antonio Augusto', 'Franco Garcia', email = 'augusto.garcia@usp.br', role = c('cre', 'aut')))
+             person('Kaio', 'Olimpio das Graças Dias', email = 'kaioolimpio@usp.br', role = c('aut')),
+             person('Wellingson', 'Assunção Araújo', email = 'wellingson.araujo@usp.br', role = c('aut')),
+             person('Antonio Augusto', 'Franco Garcia', email = 'augusto.garcia@usp.br', role = c('aut')))
 Description: Package for data analysis of Epagri-Chapecó
 License: MIT + file LICENSE
 Imports: 
