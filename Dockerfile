@@ -30,7 +30,7 @@ RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.16")
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.2.1")'
 
 RUN R -e 'remotes::install_local("/tmp/app")'
-EXPOSE 80/tcp
+EXPOSE 85/tcp
 RUN rm /srv/shiny-server/index.html
 COPY ./inst/app /srv/shiny-server/
 COPY ./inst/app/shiny-server.conf /etc/shiny-server/shiny-server.conf
