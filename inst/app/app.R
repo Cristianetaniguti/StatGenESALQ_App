@@ -1,1 +1,1 @@
-epagriApp::run_app()
+shiny::shinyApp(epagriApp:::app_ui(), epagriApp:::app_server)
