@@ -14,9 +14,9 @@
 ## Fill the DESCRIPTION ----
 ## Add meta data about your application
 golem::fill_desc(
-  pkg_name = "epagriApp", # The Name of the package containing the App 
-  pkg_title = "EPAGRI App", # The Title of the package containing the App 
-  pkg_description = "Package for data analysis of Epagri-Chapecó", # The Description of the package containing the App 
+  pkg_name = "StatGen-ESALQ", # The Name of the package containing the App 
+  pkg_title = "StatGen-ESALQ App", # The Title of the package containing the App 
+  pkg_description = "Package for statistical genetics analysis", # The Description of the package containing the App 
   author_first_name = "Cristiane", # Your First Name
   author_last_name = "Taniguti", # Your Last Name
   author_email = "chtaniguti@usp.br", # Your Email
@@ -28,7 +28,7 @@ golem::set_golem_options()
 
 ## Create Common Files ----
 ## See ?usethis for more information
-usethis::use_mit_license( name = "Golem User" )  # You can set another license here
+usethis::use_mit_license( name = "StatGen-ESALQ" )  # You can set another license here
 usethis::use_readme_rmd( open = FALSE )
 usethis::use_code_of_conduct()
 usethis::use_lifecycle_badge( "Experimental" )

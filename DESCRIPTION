@@ -1,5 +1,5 @@
-Package: epagriApp
-Title: EPAGRI App
+Package: StatGen-ESALQ
+Title: StatGen-ESALQ App
 Version: 0.0.0.9000
 Authors@R: c(person('Cristiane Hayumi', 'Taniguti', email = 'chtaniguti@usp.br', role = c('cre', 'aut')),
              person('Jenifer Camila', 'Godoy dos Santos', email = 'godoycamilajds@usp.br', role = c('aut')),

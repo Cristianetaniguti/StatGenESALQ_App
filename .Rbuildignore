@@ -3,3 +3,4 @@
 ^Dockerfile$
 ^app\.R$
 ^rsconnect$
+^LICENSE\.md$

@@ -13,34 +13,34 @@ knitr::opts_chunk$set(
 )
 ```
 
-# epagriApp
+# StatGen-ESALQ
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of epagriApp is to ...
+The goal of StatGen-ESALQ is to ...
 
 ## Installation
 
-You can install the released version of epagriApp from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of StatGen-ESALQ from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("epagriApp")
+install.packages("StatGen-ESALQ")
 ```
 
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Cristianetaniguti/epagriApp")
+devtools::install_github("Cristianetaniguti/StatGen-ESALQ")
 ```
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(epagriApp)
+library(StatGen-ESALQ)
 ## basic example code
 ```
 

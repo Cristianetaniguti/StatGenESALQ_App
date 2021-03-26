@@ -1,7 +1,5 @@
-# Epagri App
+# StatGen-ESALQ App
 
-Ferramenta de análise estatítica complementar ao curso "Atualização em ferramentas estatísticas aplicadas ao melhoramento de plantas" realizado em parceria pelo Laboratório de Genética Estatística (ESALQ - USP) e EPAGRI (Chapecó).
+This package joint several tools for statistical genetics analysis. Check the description of each tool in its respectively window. The tools are developed by students of Statistical Genetics Lab of University of São Paulo (ESALQ).
 
-Ministrantes e autores do material: Cristiane Hayumi Taniguti, Jenifer Camila Godoy dos Santos, Kaio Olimpio das Graças Dias e Wellingson Assunção Araújo.
-
-Orientação de Antonio Augusto Franco Garcia.
+Supervisor: Antonio Augusto Franco Garcia.
