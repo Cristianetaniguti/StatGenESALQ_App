@@ -1,18 +1,18 @@
 FROM rocker/shiny-verse
 
 RUN apt-get update && apt-get install -y  \
-    	              libxml2-dev \
-  		      imagemagick \
-		      libcurl4-openssl-dev \
-		      libgl1-mesa-dev \
-		      libglu1-mesa-dev \
-		      libicu-dev \
-		      libpng-dev \
-		      libssl-dev \
-		      make \
-		      pandoc \
-		      pandoc-citeproc \
-		      zlib1g-dev
+    	                libxml2-dev \
+  		                imagemagick \
+		                  libcurl4-openssl-dev \
+		                  libgl1-mesa-dev \
+		                  libglu1-mesa-dev \
+		                  libicu-dev \
+		                  libpng-dev \
+		                  libssl-dev \
+		                  make \
+		                  pandoc \
+		                  pandoc-citeproc \
+		                  zlib1g-dev
 
 COPY ./ /tmp/app/
 

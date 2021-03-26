@@ -6,7 +6,7 @@ Authors@R: c(person('Cristiane Hayumi', 'Taniguti', email = 'chtaniguti@usp.br',
              person('Kaio', 'Olimpio das Graças Dias', email = 'kaioolimpio@usp.br', role = c('aut')),
              person('Wellingson', 'Assunção Araújo', email = 'wellingson.araujo@usp.br', role = c('aut')),
              person('Antonio Augusto', 'Franco Garcia', email = 'augusto.garcia@usp.br', role = c('aut')))
-Description: Package for data analysis of Epagri-Chapecó
+Description: Package for statistical genetics data analysis.
 License: MIT + file LICENSE
 Imports: 
     config,
@@ -17,7 +17,8 @@ Imports:
     DT,
     glue,
     htmltools,
-    shinydashboard
+    shinydashboard,
+    pkgload
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
