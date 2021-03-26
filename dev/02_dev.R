@@ -44,7 +44,7 @@ usethis::use_test( "app" )
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("epagriApp")
+usethis::use_vignette("StatGenESALQ")
 devtools::build_vignettes()
 
 ## Code coverage ----

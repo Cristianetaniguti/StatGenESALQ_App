@@ -1,4 +1,4 @@
 library(testthat)
-library(epagriApp)
+library(StatGenESALQ)
 
-test_check("epagriApp")
+test_check("StatGenESALQ")
