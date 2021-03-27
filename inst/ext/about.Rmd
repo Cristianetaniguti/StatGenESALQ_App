@@ -11,5 +11,4 @@ Overview of features:
 
 * Experimental design 
 
-* Selection indices
 

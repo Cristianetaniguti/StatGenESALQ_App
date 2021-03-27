@@ -15,8 +15,7 @@ app_ui <- function(request) {
       dashboardHeader(title = "StatGen-ESALQ App"),
       dashboardSidebar(
         sidebarMenu(
-          menuItem("About", tabName = "about", icon = icon("favicon.ico")),
-          menuItem("Experiment design", tabName = "design", icon = icon("ruler-combined")),
+          menuItem("About", tabName = "about", icon = icon("address-card")),
           menuItem("Selection indices", tabName = "indices", icon = icon("crosshairs")),
           tags$li(class = "dropdown",
                   tags$a(href="https://statgen-esalq.github.io/", target="_blank", 
