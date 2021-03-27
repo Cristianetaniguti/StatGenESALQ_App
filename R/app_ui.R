@@ -4,6 +4,7 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import shinydashboard
+#' @import shinymanager
 #' @noRd
 app_ui <- function(request) {
   tagList(
@@ -14,8 +15,9 @@ app_ui <- function(request) {
       dashboardHeader(title = "StatGen-ESALQ App"),
       dashboardSidebar(
         sidebarMenu(
-          menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-          menuItem("Widgets", tabName = "widgets", icon = icon("th")),
+          menuItem("About", tabName = "about", icon = icon("favicon.ico")),
+          menuItem("Experiment design", tabName = "design", icon = icon("ruler-combined")),
+          menuItem("Selection indices", tabName = "indices", icon = icon("crosshairs")),
           tags$li(class = "dropdown",
                   tags$a(href="https://statgen-esalq.github.io/", target="_blank", 
                          tags$img(height = "60px", alt="Logo", src="logo.png")
@@ -82,20 +84,8 @@ app_ui <- function(request) {
         
         tabItems(
           # First tab content
-          tabItem(tabName = "dashboard",
-                  fluidRow(
-                    box(plotOutput("plot1", height = 250)),
-                    
-                    box(
-                      title = "Controls",
-                      sliderInput("slider", "Number of observations:", 1, 100, 50)
-                    )
-                  )
-          ),
-          
-          # Second tab content
-          tabItem(tabName = "widgets",
-                  h2("Widgets tab content")
+          tabItem(tabName = "about",
+                  includeMarkdown(system.file("ext", "about.Rmd", package = "StatGenESALQ"))
           )
         )
       )
