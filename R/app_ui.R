@@ -16,6 +16,7 @@ app_ui <- function(request) {
       dashboardSidebar(
         sidebarMenu(
           menuItem("About", tabName = "about", icon = icon("address-card")),
+          menuItem("Multi environment", tabName = "met", icon = icon("chart-line")),
           menuItem("Selection indices", tabName = "indices", icon = icon("crosshairs")),
           tags$li(class = "dropdown",
                   tags$a(href="https://statgen-esalq.github.io/", target="_blank", 
@@ -79,12 +80,27 @@ app_ui <- function(request) {
         border-right-color:#cc662f;
         border-top-color:#cc662f;
         }
+        
+        .box.box-solid.box-info>.box-header {
+        color:#fff;
+        background:#003350
+        }
+        
+        .box.box-solid.box-info{
+        border-bottom-color:#003350;
+        border-left-color:#003350;
+        border-right-color:#003350;
+        border-top-color:#003350;
+        }
                               '))),
         
         tabItems(
           # First tab content
           tabItem(tabName = "about",
                   includeMarkdown(system.file("ext", "about.Rmd", package = "StatGenESALQ"))
+          ),
+          tabItem(tabName = "met",
+                  mod_met_ui("met_ui_1")
           )
         )
       )

@@ -6,7 +6,7 @@ library(dplyr)
 library(metan)
 
 # Load data
-dat <- read.table("./dados/dados_feijao.txt", header = TRUE, sep = "\t", dec = ",")
+dat <- read.table("dados_feijao.txt", header = TRUE, sep = "\t", dec = ",")
 head(dat)
 
 # Defining Factors 
@@ -19,7 +19,7 @@ str(dat)
 sum(is.na(dat$rend))
 tapply(dat$rend, dat$G, mean, na.rm = TRUE)
 table(dat$G, dat$L)
-
+table(dat$local)
 # Remove 2 locations
 dat <- droplevels(dat[-c(which(dat$L %in% c("PS1ES", "UR2ES"))),])
 
@@ -32,9 +32,10 @@ Ann <- Annicchiarico(dat,
                      env = L,
                      gen = G,
                      rep = R,
-                     resp = rend,
+                     resp = "rend",
                      prob = 0.25)
 
+Ann[["rend"]]$environments
 Ann$rend$environments
 Ann$rend$general
 Ann$rend$favorable
@@ -45,7 +46,8 @@ Shuk <- Shukla(dat,
               env = L,
               gen = G,
               rep = R,
-              resp = rend)
+              resp = "rend")
+Shuk[["rend"]]$ShuklaVar
 Shuk$rend$ShuklaVar
 Shuk$rend$GEN
 Shuk$rend$rMean
@@ -73,6 +75,6 @@ eco <- ecovalence(dat,
                   gen = G,
                   rep = R,
                   resp = rend)
-eco
+eco[[1]]
 
 

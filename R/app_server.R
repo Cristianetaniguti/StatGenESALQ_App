@@ -6,7 +6,7 @@
 #' @noRd
 app_server <- function( input, output, session ) {
   # List the first level callModules here
-  passwords <- c(Cris = "DanaBrisa%2021", # Author
+  passwords <- c(Cris = "1", # Author
                  Kaio = "z8*R@3X1",
                  Camila = "pFfPpa&85",
                  Wellingson = "6V1VTUy^#",
@@ -28,4 +28,7 @@ app_server <- function( input, output, session ) {
   res_auth <- secure_server(
     check_credentials = check_credentials(credentials)
   )
+
+  callModule(mod_met_server, "met_ui_1")
+ 
 }
