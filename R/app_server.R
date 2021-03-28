@@ -6,7 +6,7 @@
 #' @noRd
 app_server <- function( input, output, session ) {
   # List the first level callModules here
-  passwords <- c(Cris = "1", # Author
+  passwords <- c(Cris = "DanaBrisa%2021", # Author
                  Kaio = "z8*R@3X1",
                  Camila = "pFfPpa&85",
                  Wellingson = "6V1VTUy^#",

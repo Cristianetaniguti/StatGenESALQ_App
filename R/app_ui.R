@@ -16,8 +16,8 @@ app_ui <- function(request) {
       dashboardSidebar(
         sidebarMenu(
           menuItem("About", tabName = "about", icon = icon("address-card")),
-          menuItem("Multi environment", tabName = "met", icon = icon("chart-line")),
           menuItem("Selection indices", tabName = "indices", icon = icon("crosshairs")),
+          menuItem("Multi environment", tabName = "met", icon = icon("chart-line")),
           tags$li(class = "dropdown",
                   tags$a(href="https://statgen-esalq.github.io/", target="_blank", 
                          tags$img(height = "60px", alt="Logo", src="logo.png")
