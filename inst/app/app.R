@@ -1,1 +1,1 @@
-shiny::shinyApp(StatGenESALQ:::app_ui(), StatGenESALQ:::app_server)
+StatGenESALQ::run_app()

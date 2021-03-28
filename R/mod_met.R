@@ -151,7 +151,12 @@ mod_met_server <- function(input, output, session){
   button_met2 <- eventReactive(input$met5, {
     withProgress(message = 'Building graphic', value = 0, {
       incProgress(0, detail = paste("Doing part", 1))
-      dat <- button_met1() %>% select(c("local", "gen", "bloco",input$met2)) %>% 
+      if(is.null(input$data_met)){
+        dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
+      } else {
+        dat <- read.table(input$data_met)
+      }
+      dat <- dat %>% select(c("local", "gen", "bloco",input$met2)) %>% 
         filter(local %in% input$met3) %>% droplevels() %>%
         mutate_if(is.character, as.factor)
       
