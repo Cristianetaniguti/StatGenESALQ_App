@@ -103,6 +103,8 @@ mod_met_ui <- function(id){
 #' met Server Function
 #'
 #' @import ggplot2
+#' @import metan
+#' @import dplyr
 #' 
 #' @noRd 
 mod_met_server <- function(input, output, session){
