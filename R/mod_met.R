@@ -39,7 +39,7 @@ mod_met_ui <- function(id){
                  ),
              ),
              
-             box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Graphical analysis of genotype-vs-environment interaction",
+             box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = F, status="info", title = "Graphical analysis of genotype-vs-environment interaction",
                  radioButtons(ns("met4"), label = p("Graphic type:"),
                               choices = list("Heatmap" = 1, "Line plot" = 2),
                               selected = unlist(list("Heatmap" = 1, "Line plot" = 2))[1]), 
