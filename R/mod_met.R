@@ -15,7 +15,7 @@ mod_met_ui <- function(id){
                  p("Here we present a graphic interface for the R package 'metan' functions. The package presents other features and options not implemented here.")
              ),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, status="primary", title = "Input file",
-                 p("Download here an input file example format:"),
+                 p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'bloco' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
                  downloadButton(ns("met_input_exemple")), hr(),
                  p("Upload here your file:"),
                  fileInput("data_met", label = h6("File: data.txt"), multiple = F),
@@ -35,8 +35,9 @@ mod_met_ui <- function(id){
                                         selected = "Press 'Read the file' button to update"),
                      hr(),
                      actionButton(ns("met5"), "Run analysis",icon("refresh")), br(),
-                     p("Expand the windows above to access the results")
+                    
                  ),
+                 p("Expand the windows above to access the results")
              ),
              
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = F, status="info", title = "Graphical analysis of genotype-vs-environment interaction",

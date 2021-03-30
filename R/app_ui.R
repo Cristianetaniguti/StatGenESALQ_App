@@ -16,6 +16,7 @@ app_ui <- function(request) {
       dashboardSidebar(
         sidebarMenu(
           menuItem("About", tabName = "about", icon = icon("address-card")),
+          menuItem("Assumptions test", tabName = "assumptionsTest", icon = icon("chart-line")),
           menuItem("Selection indices", tabName = "indices", icon = icon("crosshairs")),
           menuItem("Multi environment", tabName = "met", icon = icon("chart-line")),
           tags$li(class = "dropdown",
@@ -101,6 +102,9 @@ app_ui <- function(request) {
           ),
           tabItem(tabName = "met",
                   mod_met_ui("met_ui_1")
+          ),
+          tabItem(tabName = "assumptionsTest",
+                  mod_assumptionsTest_ui("assumptionsTest_ui_1")
           )
         )
       )

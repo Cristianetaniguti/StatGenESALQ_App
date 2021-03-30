@@ -18,12 +18,16 @@
 usethis::use_package( "shinydashboard" )
 usethis::use_package( "shinymanager" )
 usethis::use_package( "metan" )
-usethis::use_package( "ggplot2" )
+usethis::use_package( "ggfortify" )
+usethis::use_package( "lmtest" )
+usethis::use_package( "car" )
+usethis::use_package( "psych" )
+usethis::use_package( "multtest" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module( name = "met" ) # Name of the module
-golem::add_module( name = "name_of_module2" ) # Name of the module
+golem::add_module( name = "assumptionsTest" ) # Name of the module
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*

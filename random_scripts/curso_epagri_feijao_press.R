@@ -8,15 +8,16 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
 BiocManager::install("multtest")
+
 # Dados epagri
 ### chamada e estrutura dos dados
 library(dplyr)
 
-data <- read.table("data_feijao_CA1ES.txt", head=TRUE, sep = "\t", dec = ",", stringsAsFactors = F)
+data <- read.table("dados_feijao_CA1ES.txt", head=TRUE, sep = "\t", dec = ",", stringsAsFactors = F)
+data <- data %>% filter(local == "CA1ES")
+
 head(data)
 str(data)
-data$rend <- as.numeric(data$rend)
-data$mmg <- as.numeric(data$mmg)
 data$bloco <- as.character(data$bloco)
 data <- mutate_if(data, is.character, as.factor)
 str(data)
@@ -72,7 +73,10 @@ plot(mod2,5,col = "#CC662f")
 ### Residuos do modelo precisam apresentar distribuição normal teste shapiro
 ### H0 = Distribuição dos residuo é normal se p > 0,05
 ### H1 = Distribuição dos residuo não é normal se p <  0,05
-shapiro.test(mod$residuals)
+sha <- shapiro.test(mod$residuals)
+str(sha)
+df <- data.frame(W = sha$statistic,
+                `p-value` = sha$p.value)
 shapiro.test(mod2$residuals)
 
 ### Independencia dos residuos 
@@ -80,14 +84,25 @@ shapiro.test(mod2$residuals)
 ### medidas repetidas nas quais os n´ıveis das condi¸c˜oes de avalia¸c˜ao (ou simplesmente “condi¸c˜ao”) n˜ao podem ser aleatorizados entre si (por exemplo, o tempo ou profundidade).
 ### D-W statistic geralmente usado valores entre 1,5 a 2,5 para indicar que os residuos não estão correlacionados
 library(car)
-durbinWatsonTest(mod)
+dur <-durbinWatsonTest(mod)
+dur_df <- data.frame(r = dur$r,
+                     dw = dur$dw,
+                     p = dur$p,
+                     alternative = dur$alternative)
 durbinWatsonTest(mod2)
 ### homocedasticidade das variancias 
 ### Esse teste tem como pressuposição a normalidade dos dados assim como D-W
 ### H0 = ha homecasticidade das variancias se p > 0,05
 ### H1 = não ha homecasticidade das variancias se p <  0,05
 library(lmtest)
-bptest(mod)
+bp <- bptest(mod)
+str(bp)
+bp_df <- data.frame(statistic = bp$statistic,
+                    parameter = bp$parameter,
+                    method = bp$method,
+                    `p-value` = bp$p.value)
+
+
 bptest(mod2)
 
 # install.packages("multtest")
@@ -126,8 +141,9 @@ outlier <- function(resid, alpha=0.05){
 }
 
 ## Aplicação da função aos dados 
-(outlier(mod$residuals, alpha = 0.05))
+test <- outlier(mod$residuals, alpha = 0.05)
 (outlier(mod2$residuals, alpha = 0.05))
+
 ### analise de Multicolinearidade
 ### Indica uma correlação muito alta entre as variedades independentes 
 ### Indice de Correlação de pearson indica que acima de 0.8 ou 0.9 a depender do autor.
