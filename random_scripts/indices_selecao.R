@@ -46,7 +46,8 @@ head(df_milho)
 df <- df_milho
 pheno <- colnames(df)[-c(1:4)]
 
-
+# Modelo invidual
+vg <- vf <- vga <- h2 <- vector()
 for(i in 1:length(pheno)){
   temp <- df[,pheno[i]]
   mod <- lm(temp ~ df$gen + df$local/df$rep/df$block + 
@@ -56,24 +57,67 @@ for(i in 1:length(pheno)){
   emm_vec <- emm$emmean
   if(i == 1) df_emm <- data.frame(gen = emm$gen, emm_vec) else df_emm <- cbind(df_emm, emm_vec)
 
-  
   mod_anova <- anova(mod)
   n_rep <- length(unique(df$rep))
   n_local <- length(unique(df$local))
   n_block <- length(unique(df$block))
   
   # variância genetica
-  vg <- (mod_anova$`Mean Sq`[1] - mod_anova$`Mean Sq`[4])/n_rep*n_local
+  vg[i] <- (mod_anova$`Mean Sq`[1] - mod_anova$`Mean Sq`[4])/n_rep*n_local
   
   # variancia da interação genotipo x ambiente
-  vga <- (mod_anova$'Mean Sq'[4]-mod_anova$'Mean Sq'[6])/n_rep*n_local
+  vga[i] <- (mod_anova$'Mean Sq'[4]-mod_anova$'Mean Sq'[6])/n_rep*n_local
   
   # variância fenotipica
-  vf <- mod_anova$`Mean Sq`[1]/n_rep*n_local
+  vf[i] <- mod_anova$`Mean Sq`[1]/n_rep*n_local
 
   # herdabilidade
-  h2 <- vg/vf
+  h2[i] <- vg[i]/vf[i]
 }
+
+names(vg) <- pheno
+
+# Modelos dois a dois
+combin <- expand.grid(pheno,pheno)
+
+cvg <- cvf <- v2g <- v2f <- vector()
+for(i in 1:dim(combin)[1]){
+  temp1 <- df[,as.character(combin[i,1])] 
+  temp2 <- df[,as.character(combin[i,2])]
+  temp <- temp1 + temp2
+  mod <- lm(temp ~ df$gen + df$local/df$rep/df$block + 
+              df$local/df$rep + df$local + df$gen*df$local)
+  
+  mod_anova <- anova(mod)
+  n_rep <- length(unique(df$rep))
+  n_local <- length(unique(df$local))
+  
+  # variância genetica
+  v2g[i] <- (mod_anova$`Mean Sq`[1] - mod_anova$`Mean Sq`[4])/n_rep*n_local
+  cvg[i] <- (v2g[i] - vg[combin[i,1]] - vg[combin[i,2]])/2
+  
+  # variância fenotipica
+  v2f[i] <- mod_anova$`Mean Sq`[1]/n_rep*n_local
+  cvf[i] <- (v2f[i] - vf[combin[i,1]] - vf[combin[i,2]])/2
+}
+
+cvg <- matrix(cvg, nrow = length(pheno))
+cvf <- matrix(cvf, nrow = length(pheno))
+
+colnames(cvg) <- rownames(cvg) <- pheno
+colnames(cvf) <- rownames(cvf) <- pheno
+
+# replacing diagonal with variances from individual models
+# Não precisa, pq da o mesmo resultado
+# for(i in 1:length(pheno)){
+#   for(j in 1:length(pheno)){
+#     if(i == j){
+#       cvg[i,j] <- vg[i]
+#       cvf[i,j] <- vf[i]
+#     }
+#   }
+# }
+
 
 colnames(df_emm) <- c("gen", pheno)
 head(df_emm)
