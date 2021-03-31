@@ -28,7 +28,7 @@ golem::add_shinyserver_file()
 
 ## Docker ----
 ## If you want to deploy via a generic Dockerfile
-golem::add_dockerfile()
+golem::add_dockerfile(output = "test")
 
 ## If you want to deploy to ShinyProxy
 golem::add_dockerfile_shinyproxy()

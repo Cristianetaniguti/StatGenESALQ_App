@@ -163,6 +163,7 @@ vg <- (anova(mod)$'Mean Sq'[2]-anova(mod)$'Mean Sq'[3])/(2*anova(mod)$'Df'[1])
 vg
 vg2 <- (anova(mod2)$'Mean Sq'[2]-anova(mod2)$'Mean Sq'[3])/(2*anova(mod2)$'Df'[1])
 vg2
+
 ### herdabilidade
 h2 <- vg/(vg+anova(mod)$'Mean Sq'[3])
 h2

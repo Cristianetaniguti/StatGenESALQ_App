@@ -15,7 +15,7 @@ mod_met_ui <- function(id){
                  p("Here we present a graphic interface for the R package 'metan' functions. The package presents other features and options not implemented here.")
              ),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, status="primary", title = "Input file",
-                 p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'bloco' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
+                 p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'block' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
                  downloadButton(ns("met_input_exemple")), hr(),
                  p("Upload here your file:"),
                  fileInput("data_met", label = h6("File: data.txt"), multiple = F),
@@ -117,16 +117,16 @@ mod_met_server <- function(input, output, session){
     },
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
-      dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
-      write.table(dat, file = file)
+      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
+      write.csv(dat, file = file)
     } 
   )
   
   button_met1 <- eventReactive(input$met1, {
     if(is.null(input$data_met)){
-      dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
+      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
     } else {
-      dat <- read.table(input$data_met)
+      dat <- read.csv(input$data_met)
     }
     dat
   })
@@ -154,26 +154,21 @@ mod_met_server <- function(input, output, session){
   button_met2 <- eventReactive(input$met5, {
     withProgress(message = 'Building graphic', value = 0, {
       incProgress(0, detail = paste("Doing part", 1))
-      if(is.null(input$data_met)){
-        dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
-      } else {
-        dat <- read.table(input$data_met)
-      }
-      dat <- dat %>% select(c("local", "gen", "bloco",input$met2)) %>% 
+      dat <- button_met1() %>% select(c("local", "gen", "block",input$met2)) %>% 
         filter(local %in% input$met3) %>% droplevels() %>%
         mutate_if(is.character, as.factor)
       
       Ann <- Annicchiarico(dat,
                            env = local,
                            gen = gen,
-                           rep = bloco,
+                           rep = block,
                            resp = input$met2,
                            prob = 0.25)
       incProgress(0.25, detail = paste("Doing part", 2))
       Shuk <- Shukla(dat,
                      env = local,
                      gen = gen,
-                     rep = bloco,
+                     rep = block,
                      resp = input$met2)
       incProgress(0.5, detail = paste("Doing part", 3))
       Shuk_df <- data.frame(ShuklaVar = Shuk[[input$met2]]$ShuklaVar,
@@ -188,18 +183,18 @@ mod_met_server <- function(input, output, session){
         jra <- missing
         class(jra) <- "missing"
       } else {
-        jra <- ge_reg(dat, env = local, gen = gen, rep = bloco, resp = input$met2)
+        jra <- ge_reg(dat, env = local, gen = gen, rep = block, resp = input$met2)
       }
       
       incProgress(0.8, detail = paste("Doing part", 5))
       # AMMI
-      Ammi <- performs_ammi(dat, env = local, gen = gen, rep = bloco, resp = input$met2)
+      Ammi <- performs_ammi(dat, env = local, gen = gen, rep = block, resp = input$met2)
       
       # ecovalence (Wricke, 1965)
       eco <- ecovalence(dat,
                         env = local,
                         gen = gen,
-                        rep = bloco,
+                        rep = block,
                         resp = input$met2)
       
       list(dat, Ann, Shuk_df, jra, Ammi, eco)

@@ -15,7 +15,7 @@ mod_assumptionsTest_ui <- function(id){
                  p("Here we present several tests for checking model assumptions.")
              ),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, status="primary", title = "Input file",
-                 p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'bloco' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
+                 p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'block' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
                  downloadButton(ns("assum_input_exemple")), hr(),
                  p("Upload here your file:"),
                  fileInput("data_assum", label = h6("File: data.txt"), multiple = F),
@@ -24,6 +24,11 @@ mod_assumptionsTest_ui <- function(id){
                  actionButton(ns("assum1"), "Read the file",icon("refresh")), hr()
              ),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, status="primary", title = "Select variables",
+                 box(width = 12,
+                 selectInput(ns("assum_design"), label = h4("Experiment design"), 
+                             choices = list("Randomized complete block" = 1, "Alpha lattice" = 2), 
+                             selected = 1)
+                 ),
                  box(width = 6,
                      radioButtons(ns("assum2"), label = p("Choose the traits to be evaluated:"),
                                   choices = "Press 'Read the file' button to update",
@@ -109,17 +114,19 @@ mod_assumptionsTest_server <- function(input, output, session){
     },
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
-      dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
-      write.table(dat, file = file)
+      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
+      dat <- dat[,-1]
+      write.csv(dat, file = file)
     } 
   )
   
   button_assum1 <- eventReactive(input$assum1, {
     if(is.null(input$data_assum)){
-      dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
+      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
     } else {
-      dat <- read.table(input$data_assum)
+      dat <- read.csv(input$data_assum)
     }
+    print(head(dat))
     dat
   })
   
@@ -128,7 +135,7 @@ mod_assumptionsTest_server <- function(input, output, session){
     choices_trait <- choices_trait_temp
     names(choices_trait) <- choices_trait_temp
     
-    choices_locations_temp <- unique(button_assum1()[,1])
+    choices_locations_temp <- unique(button_assum1()[,"local"])
     choices_locations <- choices_locations_temp
     names(choices_locations) <- choices_locations_temp
     
@@ -146,21 +153,23 @@ mod_assumptionsTest_server <- function(input, output, session){
   button_assum2 <- eventReactive(input$assum5, {
     withProgress(message = 'Building graphic', value = 0, {
       incProgress(0, detail = paste("Doing part", 1))
-      if(is.null(input$data_assum)){
-        dat <- read.table(system.file("ext","example_inputs/dados_feijao.txt", package = "StatGenESALQ"), header = TRUE, sep = "\t", dec = ",")
-      } else {
-        dat <- read.table(input$data_assum)
-      }
-      
-      dat <- dat %>% select(c("local", "gen", "bloco",input$assum2)) %>% 
+      dat <- button_assum1() %>% select(c("local", "gen", "block",input$assum2)) %>% 
         filter(local %in% input$assum3) %>% droplevels() %>%
         mutate_if(is.character, as.factor)
       
-      dat$bloco <- as.factor(dat$bloco)
-      
-      # Data frame anova
-      mod<- lm(dat[,input$assum2] ~ dat$bloco + dat$gen)
-      
+      dat$block <- as.factor(dat$block)
+
+      if(input$assum_design == 1){
+        if(!all(c("local", "block", "gen") %in% colnames(dat)) | ("rep" %in% colnames(dat)))
+          stop(safeError("Randomized complete block design should have columns 'local', 'block' and 'gen'."))
+        mod<- lm(dat[,input$assum2] ~ dat$block + dat$gen)
+      } else {
+        if(!all(c("local", "block", "gen", "rep") %in% colnames(dat)))
+          stop(safeError("Alpha lattice design should have columns 'local', 'block', 'rep', and 'gen'."))
+        dat$rep <- as.factor(dat$rep)
+        mod<- lm(dat[,input$assum2] ~ dat$rep/dat$block + dat$gen)
+      }
+
       sha <- shapiro.test(mod$residuals)
       df <- data.frame(W = sha$statistic,
                        `p-value` = sha$p.value)
@@ -178,20 +187,20 @@ mod_assumptionsTest_server <- function(input, output, session){
                           `p-value` = bp$p.value)
       
       incProgress(0.25, detail = paste("Doing part", 2))
-      list(mod,df,dur_df,bp_df)
+      list(mod,df,dur_df,bp_df, dat)
     })
   })
   
   output$assum1_plot_out <- renderPlot({
-    autoplot(button_assum2()[[1]], which = 1, data = dat,
+    autoplot(button_assum2()[[1]], which = 1, data = button_assum2()[[5]],
              colour = "#CC662f", smooth.colour = "#003350") 
   })
   output$assum2_plot_out <- renderPlot({
-    autoplot(button_assum2()[[1]], which = 2, data = dat,
+    autoplot(button_assum2()[[1]], which = 2, data = button_assum2()[[5]],
              colour = "#CC662f", smooth.colour = "#003350") 
   })
   output$assum3_plot_out <- renderPlot({
-    autoplot(button_assum2()[[1]], which = 3, data = dat,
+    autoplot(button_assum2()[[1]], which = 3, data = button_assum2()[[5]],
              colour = "#CC662f", smooth.colour = "#003350") 
   })
   output$assum4_plot_out <- renderPlot({

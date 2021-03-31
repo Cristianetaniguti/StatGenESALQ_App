@@ -14,8 +14,6 @@ RUN apt-get update && apt-get install -y  \
 		                  pandoc-citeproc \
 		                  zlib1g-dev
 
-COPY ./ /tmp/app/
-
 RUN R -e 'install.packages("remotes")'
 RUN R -e 'remotes::install_github("r-lib/remotes", ref = "97bbf81")'
 RUN Rscript -e 'remotes::install_version("glue",upgrade="never", version = "1.4.2")'
@@ -28,7 +26,14 @@ RUN Rscript -e 'remotes::install_version("config",upgrade="never", version = "0.
 RUN Rscript -e 'remotes::install_version("shinydashboard",upgrade="never", version = "0.7.1")'
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.16")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.2.1")'
+RUN Rscript -e 'remotes::install_version("ggfortify",upgrade="never", version = "0.4.11")'
+RUN Rscript -e 'remotes::install_version("lmtest",upgrade="never", version = "0.9-38")'
+RUN Rscript -e 'remotes::install_version("car",upgrade="never", version = "3.0-10")'
+RUN Rscript -e 'remotes::install_version("psych",upgrade="never", version = "2.0.12")'
+RUN Rscript -e 'remotes::install_version("BiocManager",upgrade="never", version = "1.30.10")'
+RUN Rscript -e 'BiocManager::install("multtest")'
 
+COPY ./ /tmp/app/
 RUN R -e 'remotes::install_local("/tmp/app")'
 EXPOSE 85/tcp
 RUN rm /srv/shiny-server/index.html
