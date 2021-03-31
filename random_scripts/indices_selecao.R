@@ -1,11 +1,13 @@
 # install.packages("agricolae")
 # install.packages("emmeans")
-library(agricolae)
-library(emmeans)
 # library(devtools)
 # install_github("reyzaguirre/st4gi")
+library(agricolae)
+library(emmeans)
 library(st4gi)
+library(metan)
 
+setwd("StatGenEsalq_App/inst/ext/example_inputs/")
 df_milho <- read.csv("data_corn.csv")
 
 head(df_milho)
@@ -40,13 +42,14 @@ adj.mean <- test$emmean
 
 new.df <- data.frame(gen = test$gen, adj.mean = test$emmean, local)
 length(unique(df_milho$gen))
+# modelo lm e do agricolae está dando diferente
 
-## Modelo conjunto (tese chefe)
+## Modelo conjunto - todos os ambientes (tese chefe)
 head(df_milho)
 df <- df_milho
 pheno <- colnames(df)[-c(1:4)]
 
-# Modelo invidual
+# Modelo invidual para cada pheno
 vg <- vf <- vga <- h2 <- vector()
 for(i in 1:length(pheno)){
   temp <- df[,pheno[i]]
@@ -77,7 +80,7 @@ for(i in 1:length(pheno)){
 
 names(vg) <- pheno
 
-# Modelos dois a dois
+# Modelos pheno dois a dois
 combin <- expand.grid(pheno,pheno)
 
 cvg <- cvf <- v2g <- v2f <- vector()
@@ -117,7 +120,6 @@ colnames(cvf) <- rownames(cvf) <- pheno
 #     }
 #   }
 # }
-
 
 colnames(df_emm) <- c("gen", pheno)
 head(df_emm)
@@ -182,15 +184,7 @@ increasing <- c("acam", "dec")
 weights <- rep(1, length(pheno))
 mulamba_index(df_emm, increasing = increasing)
 
-### parametros geneticos
-### variancia genetica 
+## dando pau
+smith <- Smith_Hazel(df_emm[,-1], use_data = "pheno", pcov = round(cvf,3), gcov = round(cvg,3), weights = rep(1, length(pheno)))
 
-vg <- (anova(mod)$'Mean Sq'[2]-anova(mod)$'Mean Sq'[3])/(2*anova(mod)$'Df'[1])
-vg
-
-
-### herdabilidade
-h2 <- vg/(vg+anova(mod)$'Mean Sq'[3])
-h2
-
-
+## ganho de seleção
