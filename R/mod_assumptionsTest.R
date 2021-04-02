@@ -211,13 +211,8 @@ mod_assumptionsTest_server <- function(input, output, session){
     DT::datatable(data.frame(anova(button_assum2()[[1]])),  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -226,13 +221,8 @@ mod_assumptionsTest_server <- function(input, output, session){
     DT::datatable(button_assum2()[[2]],  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -240,13 +230,8 @@ mod_assumptionsTest_server <- function(input, output, session){
     DT::datatable(button_assum2()[[3]],  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -255,13 +240,8 @@ mod_assumptionsTest_server <- function(input, output, session){
     DT::datatable(button_assum2()[[4]],  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )

@@ -16,9 +16,14 @@ app_ui <- function(request) {
       dashboardSidebar(
         sidebarMenu(
           menuItem("About", tabName = "about", icon = icon("address-card")),
-          menuItem("Assumptions test", tabName = "assumptionsTest", icon = icon("chart-line")),
-          menuItem("Selection indices", tabName = "indices", icon = icon("crosshairs")),
-          menuItem("Multi environment", tabName = "met", icon = icon("chart-line")),
+          menuItem("Single environment", tabName = "single", icon = icon("circle"),
+                   menuSubItem("Assumptions test", tabName = "assumptionsTest", icon = icon("chart-line")),
+                   menuSubItem("Selection indices", tabName = "indices", icon = icon("crosshairs"))
+                   ),
+          menuItem("Multi environment", tabName = "multi", icon = icon("circle"),
+                   menuSubItem("Assumptions test", tabName = "METassumptionsTest", icon = icon("chart-line")),
+                   menuSubItem("Selection indices", tabName = "METindices", icon = icon("crosshairs"))
+                   ),
           tags$li(class = "dropdown",
                   tags$a(href="https://statgen-esalq.github.io/", target="_blank", 
                          tags$img(height = "60px", alt="Logo", src="logo.png")
@@ -100,11 +105,16 @@ app_ui <- function(request) {
           tabItem(tabName = "about",
                   includeMarkdown(system.file("ext", "about.Rmd", package = "StatGenESALQ"))
           ),
-          tabItem(tabName = "met",
-                  mod_met_ui("met_ui_1")
-          ),
           tabItem(tabName = "assumptionsTest",
                   mod_assumptionsTest_ui("assumptionsTest_ui_1")
+          ),
+          tabItem(tabName = "indices",
+                  mod_indices_ui("indices_ui_1")
+          ),
+          # tabItem(tabName = "METassumptionsTest"),
+          # 
+          tabItem(tabName = "METindices",
+                  mod_met_ui("met_ui_1")
           )
         )
       )

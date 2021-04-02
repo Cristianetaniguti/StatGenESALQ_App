@@ -3,6 +3,7 @@
 export(run_app)
 import(car)
 import(dplyr)
+import(emmeans)
 import(ggfortify)
 import(ggplot2)
 import(lmtest)

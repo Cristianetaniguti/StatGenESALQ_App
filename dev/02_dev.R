@@ -23,11 +23,17 @@ usethis::use_package( "lmtest" )
 usethis::use_package( "car" )
 usethis::use_package( "psych" )
 usethis::use_package( "multtest" )
+usethis::use_package( "emmeans" )
+usethis::use_package( "MASS" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module( name = "met" ) # Name of the module
 golem::add_module( name = "assumptionsTest" ) # Name of the module
+golem::add_module( name = "METassumptionsTest" ) # Name of the module
+golem::add_module( name = "indices" ) # Name of the module
+golem::add_module( name = "METindices" ) # Name of the module
+
 
 ## Add helper functions ----
 ## Creates ftc_* and utils_*

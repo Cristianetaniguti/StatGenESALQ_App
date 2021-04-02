@@ -1,4 +1,4 @@
-#' analysis UI Function
+#' METindices UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -7,24 +7,24 @@
 #' @noRd 
 #'
 #' @importFrom shiny NS tagList 
-mod_analysis_ui <- function(id){
+mod_METindices_ui <- function(id){
   ns <- NS(id)
   tagList(
  
   )
 }
     
-#' analysis Server Function
+#' METindices Server Function
 #'
 #' @noRd 
-mod_analysis_server <- function(input, output, session){
+mod_METindices_server <- function(input, output, session){
   ns <- session$ns
  
 }
     
 ## To be copied in the UI
-# mod_analysis_ui("analysis_ui_1")
+# mod_METindices_ui("METindices_ui_1")
     
 ## To be copied in the server
-# callModule(mod_analysis_server, "analysis_ui_1")
+# callModule(mod_METindices_server, "METindices_ui_1")
  

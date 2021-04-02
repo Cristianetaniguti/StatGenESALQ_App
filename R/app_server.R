@@ -35,4 +35,5 @@ app_server <- function( input, output, session ) {
 
   callModule(mod_met_server, "met_ui_1")
   callModule(mod_assumptionsTest_server, "assumptionsTest_ui_1")
+  callModule(mod_indices_server, "indices_ui_1")
 }
