@@ -145,6 +145,7 @@ mod_indices_server <- function(input, output, session){
         dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
       } else {
         dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
+        dat <- dat[,-1]
       }
     } else {
       dat <- read.csv(input$data_indice)
@@ -164,9 +165,6 @@ mod_indices_server <- function(input, output, session){
       choices_locations_temp <- unique(button_indice1()[,"local"])
       choices_locations <- choices_locations_temp
       names(choices_locations) <- choices_locations_temp
-      
-      choices_geno <- unique(as.character(button_indice1()$gen))
-      names(choices_geno) <- choices_geno
       
       updateCheckboxGroupInput(session, "indice2",
                                label="Choose the traits to be evaluated:",

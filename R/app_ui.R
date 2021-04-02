@@ -111,8 +111,9 @@ app_ui <- function(request) {
           tabItem(tabName = "indices",
                   mod_indices_ui("indices_ui_1")
           ),
-          # tabItem(tabName = "METassumptionsTest"),
-          # 
+          tabItem(tabName = "METassumptionsTest",
+                  mod_METassumptionsTest_ui("METassumptionsTest_ui_1")
+          ),
           tabItem(tabName = "METindices",
                   mod_met_ui("met_ui_1")
           )

@@ -9,6 +9,10 @@ This shiny app performs statistical genetics analysis for diverse purposes. Plea
 
 Overview of features:
 
-* Experimental design 
+* Single environment analysis
 
 * Multi environment analysis
+
+* Assumptions tests
+
+* Selection indices

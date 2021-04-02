@@ -34,10 +34,10 @@ mod2<- lm(log(np)~block:local + gen + local + gen:local, data=data1)
 mod3<- lm(sqrt(np + 0.5)~block:local + gen + local + gen:local, data=data1)
 
 ###### para o modelo 4 a transformação de box cox requer passos adicionais
-
+df <- data1
 library(MASS)
-boxcox(np~block:local + gen + local + gen:local, data=data1, plotit=T, lam=seq(-3, 3, 1/20))
-bc<-boxcox(np~block:local + gen + local + gen:local, data=data1, plotit=T, lam=seq(-3, 3, 1/20))
+boxcox(np~block:local + gen + local + gen:local, data=data1, plotit=F, lam=seq(-3, 3, 1/20))
+bc<-boxcox(np~block:local + gen + local + gen:local, data=data1, plotit=F, lam=seq(-3, 3, 1/20))
 (lambda = bc$x[which.max(bc$y)])
 np_trans <- ((data1$np^lambda-1)/lambda)
 data_trans <- data.frame(np_trans , local = data1$local ,gen = data1$gen , block = data1$block)

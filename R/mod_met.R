@@ -14,6 +14,11 @@ mod_met_ui <- function(id){
              box(width = 12, 
                  p("Here we present a graphic interface for the R package 'metan' functions. The package presents other features and options not implemented here.")
              ),
+             box(width = 12,
+                 selectInput(ns("assum_design"), label = h4("Experiment design"), 
+                             choices = list("Randomized complete block" = "block"), 
+                             selected = "block")
+             ),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, status="primary", title = "Input file",
                  p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'block' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
                  downloadButton(ns("met_input_exemple")), hr(),
