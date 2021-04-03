@@ -129,7 +129,6 @@ mod_assumptionsTest_server <- function(input, output, session){
         dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
       } else {
         dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
-        dat <- dat[,-1]
       }
       write.csv(dat, file = file, row.names = F)
     } 
@@ -141,7 +140,6 @@ mod_assumptionsTest_server <- function(input, output, session){
         dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
       } else {
         dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
-        dat <- dat[,-1]
       }
     } else {
       dat <- read.csv(input$data_assum)
@@ -203,13 +201,12 @@ mod_assumptionsTest_server <- function(input, output, session){
         incProgress(0.5, detail = paste("Doing part", 2))
         
       } else {
+        str(dat)
         if(!all(c("local", "block", "gen", "rep") %in% colnames(dat)))
           stop(safeError("Alpha lattice design should have columns 'local', 'block', 'rep', and 'gen'."))
         dat$rep <- as.factor(dat$rep)
-        cat(input$assum2)
         dat <- dat %>% select(c("local", "gen", "block","rep",input$assum2)) %>%
           filter(local == input$assum3) %>% droplevels()
-        str(dat)
         dat$rep <- as.factor(dat$rep)
         
         if(input$assum4 == "none"){
@@ -238,7 +235,6 @@ mod_assumptionsTest_server <- function(input, output, session){
                           parameter = bp$parameter,
                           method = bp$method,
                           `p-value` = bp$p.value)
-      cat("cheguei")
       incProgress(0.25, detail = paste("Doing part", 2))
       list(mod,df,dur_df,bp_df, dat)
     })

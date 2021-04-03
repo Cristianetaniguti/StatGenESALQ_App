@@ -122,7 +122,6 @@ mod_METassumptionsTest_server <- function(input, output, session){
         dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
       } else {
         dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
-        dat <- dat[,-1]
       }
       write.csv(dat, file = file, row.names = F)
     } 
@@ -162,7 +161,7 @@ mod_METassumptionsTest_server <- function(input, output, session){
       updateCheckboxGroupInput(session, "assum3",
                                label="Choose the locations to be evaluated:",
                                choices = choices_locations,
-                               selected = unlist(choices_locations)[1])
+                               selected = unlist(choices_locations)[1:2])
   })
   
   button_assum2 <- eventReactive(input$assum5, {
@@ -258,7 +257,7 @@ mod_METassumptionsTest_server <- function(input, output, session){
   })
   
   output$assum_anova_out <- DT::renderDataTable(
-    DT::datatable(data.frame(anova(button_assum2()[[1]])),  
+    DT::datatable(data.frame(round(anova(button_assum2()[[1]]),2)),  
                   extensions = 'Buttons',
                   options = list(
                     dom = 'Bfrtlp',

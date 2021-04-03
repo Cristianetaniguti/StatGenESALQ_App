@@ -133,7 +133,6 @@ mod_indices_server <- function(input, output, session){
         dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
       } else {
         dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
-        dat <- dat[,-1]
       }
       write.csv(dat, file = file, row.names = F)
     } 
@@ -145,7 +144,6 @@ mod_indices_server <- function(input, output, session){
         dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
       } else {
         dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
-        dat <- dat[,-1]
       }
     } else {
       dat <- read.csv(input$data_indice)
@@ -409,6 +407,7 @@ analysis_fixed_effects <- function(df, design, multi_env){
     }
     
     if(multi_env){
+      n_local <- length(unique(df$local))
       # variância genetica
       vg[i] <- (mod_anova["df$gen","Mean Sq"] - mod_anova["df$gen:df$local","Mean Sq"])/n_rep*n_local
       
@@ -479,7 +478,7 @@ analysis_fixed_effects <- function(df, design, multi_env){
     cvg[i] <- (v2g[i] - vg[combin[i,1]] - vg[combin[i,2]])/2
     
     # Genetic correlation
-    corrg[i] <- cvg[i]/sqrt(sqrt(vg[combin[i,1]]*vg[combin[i,2]])^2)
+    corrg[i] <- cvg[i]/sqrt(vg[combin[i,1]]*vg[combin[i,2]])
     
     # Phenotypic covariance
     cvf[i] <- (v2f[i] - vf[combin[i,1]] - vf[combin[i,2]])/2
@@ -488,11 +487,11 @@ analysis_fixed_effects <- function(df, design, multi_env){
     corrf[i] <- cvf[i]/sqrt(vf[combin[i,1]]*vf[combin[i,2]])
   }
   
-  cvg <- matrix(cvg, nrow = length(pheno))
-  cvf <- matrix(cvf, nrow = length(pheno))
-  corrg <- matrix(corrg, nrow = length(pheno))
-  corrf <- matrix(corrf, nrow = length(pheno))
-  
+  cvg <- matrix(round(cvg,2), nrow = length(pheno))
+  cvf <- matrix(round(cvf,2), nrow = length(pheno))
+  corrg <- matrix(round(corrg,2), nrow = length(pheno))
+  corrf <- matrix(round(corrf,2), nrow = length(pheno))
+
   colnames(cvg) <- rownames(cvg) <- rownames(corrg) <- rownames(corrf) <-  pheno
   colnames(cvf) <- rownames(cvf) <- colnames(corrg) <- colnames(corrf) <- pheno
   
@@ -512,7 +511,6 @@ analysis_fixed_effects <- function(df, design, multi_env){
   
   return(results)
 }
-
 
 ##' Utilities
 run_models <-function(pheno, df, design, multi_env){
@@ -540,10 +538,12 @@ run_models <-function(pheno, df, design, multi_env){
 ##' @param increasing vector with column names of phenotypes that low value is advantageous
 ##' 
 elston_index <- function(df, k=NULL, increasing=NULL){
+  pheno <- colnames(df)[-1]
   gen <- df[,1]
   df <- df[,-1]
-  pheno <- colnames(df)
   
+  if(is.vector(df)) df <- matrix(t(df))
+
   # define k
   if(is.null(k)){
     for(i in 1:length(pheno)){
@@ -564,7 +564,7 @@ elston_index <- function(df, k=NULL, increasing=NULL){
     }
   }
   
-  df_elson[which(df_elson < 0)] <- 0
+  #df_elson[which(df_elson < 0)] <- 0
   df_elson <- matrix(df_elson, ncol = length(pheno), byrow = F)
   colnames(df_elson) <- pheno
   
