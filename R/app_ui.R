@@ -23,7 +23,7 @@ app_ui <- function(request) {
           menuItem("Multi environment", tabName = "multi", icon = icon("circle"),
                    menuSubItem("Assumptions test", tabName = "METassumptionsTest", icon = icon("crosshairs")),
                    menuSubItem("Selection indices", tabName = "METindices", icon = icon("crosshairs")),
-                   menuSubItem("Metan package", tabName = "MET_metan", icon = icon("crosshairs")),
+                   menuSubItem("Stability analysis", tabName = "MET_metan", icon = icon("crosshairs")),
                    menuSubItem("Mixed models", tabName = "mix_midel", icon = icon("crosshairs"))
                    ),
           tags$li(class = "dropdown",

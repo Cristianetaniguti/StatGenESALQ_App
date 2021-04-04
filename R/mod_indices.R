@@ -394,7 +394,9 @@ analysis_fixed_effects <- function(df, design, multi_env){
     mod <- run_models(temp, df, design, multi_env)
     
     # médias ajustadas
+    log <- capture.output({
     emm <- print(emmeans(mod, specs = ~ gen))
+    })
     emm_vec <- emm$emmean
     if(i == 1) df_emm <- data.frame(gen = emm$gen, emm_vec) else df_emm <- cbind(df_emm, emm_vec)
     
@@ -432,6 +434,7 @@ analysis_fixed_effects <- function(df, design, multi_env){
       vg[i] <- NA
       h2[i] <- NA
       CV[i] <- NA
+      if(multi_env) vga[i] <- NA
     } else {
       # herdabilidade
       h2[i] <- vg[i]/(vg[i] + ((mod_anova["Residuals",'Mean Sq'])/n_rep))
@@ -512,7 +515,7 @@ analysis_fixed_effects <- function(df, design, multi_env){
   return(results)
 }
 
-##' Utilities
+##' Run linear models
 run_models <-function(pheno, df, design, multi_env){
   if(design == "DBC"){
     if(multi_env){
@@ -627,14 +630,14 @@ smith_hazel <- function(adj.means, cvf, cvg, weights = NULL){
 ##' @param herdability number
 ##' @param pheno data.frame with first column as the genotypes 
 ##' names and following columns the adjusted means for the evaluated phenotype
-##' @param selected_ind individuals selected
+##' @param selected_geno genotypes selected
 ##' 
-selection_gain <- function(pheno, selected_ind, herdability){
-  selected <- pheno[which(pheno[,1] %in% selected_ind),]
+selection_gain <- function(pheno, selected_geno, herdability){
+  selected <- pheno[which(pheno[,1] %in% selected_geno),]
   SD <- mean(selected[,2]) - mean(pheno[,2])
   SG <- herdability*SD
   I <- (length(selected[,1])/length(pheno[,1]))*100
-  result <- data.frame("Selection gain" = SG, "selection intensity (%)" = I)
+  result <- data.frame(`Selection gain` = SG, `Selection intensity_percentage` = I)
   return(result)
 }
 
