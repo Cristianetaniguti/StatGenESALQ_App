@@ -28,7 +28,9 @@ mod_METindices_ui <- function(id){
                  downloadButton(ns("indice_input_exemple")), hr(),
                  p("Upload here your file:"),
                  tags$b("Warning:"), p("To not overload our server, this feature is blocked. Please run the app locally with:"),
-                 tags$code("runGitHub('statgen-esalq/StatGenESALQ_App', ref='main')"), p("or"),
+                 tags$code("devtools::install_github('statgen-esalq/StatGenESALQ_App')"), br(),
+                 tags$code("library(StatGenESALQ)"), br(),
+                 tags$code("run_app()"), p("or"), br(),
                  tags$code("docker run --rm -e USERID=$(id -u) -e GROUPID=$(id -g) -p 80:80 -e DISABLE_AUTH=true cristaniguti/statgenapp"),
                  hr(),
                  p("If you do not have an file to be upload you can still check this app features with our example 
