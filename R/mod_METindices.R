@@ -27,7 +27,10 @@ mod_METindices_ui <- function(id){
                    The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
                  downloadButton(ns("indice_input_exemple")), hr(),
                  p("Upload here your file:"),
-                 fileInput("data_indice", label = h6("File: data.txt"), multiple = F),
+                 tags$b("Warning:"), p("To not overload our server, this feature is blocked. Please run the app locally with:"),
+                 tags$code("runGitHub('statgen-esalq/StatGenESALQ_App', ref='main')"), p("or"),
+                 tags$code("docker run --rm -e USERID=$(id -u) -e GROUPID=$(id -g) -p 80:80 -e DISABLE_AUTH=true cristaniguti/statgenapp"),
+                 hr(),
                  p("If you do not have an file to be upload you can still check this app features with our example 
                    file. The example file is automatically upload, you just need to procedure to the other buttons."),
                  br(),
@@ -126,9 +129,9 @@ mod_METindices_server <- function(input, output, session){
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
       if(input$indice_design == "block"){
-        dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
+        dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQServer"))
       } else {
-        dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
+        dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQServer"))
       }
       write.csv(dat, file = file, row.names = F)
     } 
@@ -137,9 +140,9 @@ mod_METindices_server <- function(input, output, session){
   button_indice1 <- eventReactive(input$indice1, {
     if(is.null(input$data_indice)){
       if(input$indice_design == "block"){
-        dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
+        dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQServer"))
       } else {
-        dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQ"))
+        dat <- read.csv(system.file("ext","example_inputs/data_corn.csv", package = "StatGenESALQServer"))
       }
     } else {
       dat <- read.csv(input$data_indice)
@@ -337,7 +340,7 @@ mod_METindices_server <- function(input, output, session){
   button_indice6 <- eventReactive(input$SG_button, {
     pheno <- button_indice2()$adjusted_means[,c(1,which(colnames(button_indice2()$adjusted_means) == input$indice4))]
     herdability <- button_indice2()$genetic_parameters[which(button_indice2()$genetic_parameters$pheno == input$indice4),"h2"]
-    result <- selection_gain(pheno = pheno, herdability,selected_ind = input$genotypes)
+    result <- selection_gain(pheno = pheno, herdability,selected_geno = input$genotypes)
     result
   })
   

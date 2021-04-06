@@ -1,4 +1,4 @@
-Package: StatGenESALQ
+Package: StatGenESALQServer
 Title: StatGen-ESALQ App
 Version: 0.0.0.9000
 Authors@R: c(person('Cristiane Hayumi', 'Taniguti', email = 'chtaniguti@usp.br', role = c('cre', 'aut')),

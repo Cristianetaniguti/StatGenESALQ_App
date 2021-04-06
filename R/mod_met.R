@@ -15,7 +15,7 @@ mod_met_ui <- function(id){
                  p("Here we present a graphic interface for the R package 'metan' functions. The package presents other features and options not implemented here.")
              ),
              box(width = 12,
-                 selectInput(ns("assum_design"), label = h4("Experiment design"), 
+                 selectInput(ns("met_design"), label = h4("Experiment design"), 
                              choices = list("Randomized complete block" = "block"), 
                              selected = "block")
              ),
@@ -23,7 +23,12 @@ mod_met_ui <- function(id){
                  p("The input file is a tab delimited table with a column called 'local' defining the environment, other called 'gen' defining the genotypes and other called 'block' defining the block number. The adjusted phenotypic means should be included in extra columns. Download here an input file example:"),
                  downloadButton(ns("met_input_exemple")), hr(),
                  p("Upload here your file:"),
-                 fileInput("data_met", label = h6("File: data.txt"), multiple = F),
+                 tags$b("Warning:"), p("To not overload our server, this feature is blocked. Please run the app locally with:"),
+                 tags$code("devtools::install_github('statgen-esalq/StatGenESALQ_App')"),
+                 tags$code("library(StatGenESALQ)"),
+                 tags$code("run_app()"), p("or"),
+                 tags$code("docker run --rm -e USERID=$(id -u) -e GROUPID=$(id -g) -p 80:80 -e DISABLE_AUTH=true cristaniguti/statgenapp"),
+                 hr(),
                  p("If you do not have an file to be upload you can still check this app features with our example file. The example file is automatically upload, you just need to procedure to the other buttons."),
                  br(),
                  actionButton(ns("met1"), "Read the file",icon("refresh")), hr()
@@ -40,17 +45,27 @@ mod_met_ui <- function(id){
                                         selected = "Press 'Read the file' button to update"),
                      hr(),
                      actionButton(ns("met5"), "Run analysis",icon("refresh")), br(),
-                    
+                     
                  ),
                  p("Expand the windows above to access the results")
              ),
              
-             box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = F, status="info", title = "Graphical analysis of genotype-vs-environment interaction",
+             box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Graphical analysis of genotype-vs-environment interaction",
                  radioButtons(ns("met4"), label = p("Graphic type:"),
                               choices = list("Heatmap" = 1, "Line plot" = 2),
                               selected = unlist(list("Heatmap" = 1, "Line plot" = 2))[1]), 
                  hr(),
                  plotOutput(ns("ge_plot_out")),
+             ),
+             
+             box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Safety-first index",
+                 box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, title = "Table",
+                     DT::dataTableOutput(ns("met_risk_out"))
+                 ),
+                 hr(),
+                 box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, title = "Plot",
+                     plotOutput(ns("plot_risk_out"))
+                 ),
              ),
              
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Annicchiarico's genotypic confidence index",
@@ -70,6 +85,9 @@ mod_met_ui <- function(id){
                      title="Contains the genotypic confidence index considering unfavorable environments",
                      DT::dataTableOutput(ns("met_unfavorable_out"))
                  ), hr()
+             ),
+             box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Reliability index",
+                 DT::dataTableOutput(ns("met_reliability_out"))
              ),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Shukla's stability variance parameter",
                  box(wwidth = 12, solidHeader = TRUE, 
@@ -122,14 +140,14 @@ mod_met_server <- function(input, output, session){
     },
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
-      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
+      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQServer"))
       write.csv(dat, file = file)
     } 
   )
   
   button_met1 <- eventReactive(input$met1, {
     if(is.null(input$data_met)){
-      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQ"))
+      dat <- read.csv(system.file("ext","example_inputs/data_bean.csv", package = "StatGenESALQServer"))
     } else {
       dat <- read.csv(input$data_met)
     }
@@ -181,7 +199,7 @@ mod_met_server <- function(input, output, session){
                             rMean = Shuk[[input$met2]]$rMean,
                             rShukaVar= Shuk[[input$met2]]$rShukaVar
       )
-
+      
       incProgress(0.75, detail = paste("Doing part", 4))
       missing <- colnames(table(dat$gen, dat$local)[,which(table(dat$gen, dat$local) == 0, arr.ind = T)[,2]])
       if(length(missing) > 0){
@@ -202,7 +220,14 @@ mod_met_server <- function(input, output, session){
                         rep = block,
                         resp = input$met2)
       
-      list(dat, Ann, Shuk_df, jra, Ammi, eco)
+      
+      safe <- safety_first(df = dat, pheno = input$met2, design = input$met_design)
+      
+      relia <- reliability_index(dat, 
+                                 Ann, 
+                                 input$met2)
+      
+      list(dat, Ann, Shuk_df, jra, Ammi, eco, safe, relia)
     })
   })
   
@@ -213,17 +238,36 @@ mod_met_server <- function(input, output, session){
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   })
   
+  output$met_risk_out <- DT::renderDataTable(
+    DT::datatable(button_met2()[[7]],  
+                  extensions = 'Buttons',
+                  options = list(
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
+                  ),
+                  class = "display")
+  )
+  
+  output$plot_risk_out <- renderPlot({
+    ggplot(button_met2()[[7]], aes(x = ID, y = Risk_F)) +
+      geom_segment( aes(x = ID, xend = ID, y = 0, yend = Risk_F), size = 1) +
+      geom_point(size = 2, color = "red", fill = scales::alpha("orange", 0.3), 
+                 alpha = 0.7, shape = 21, stroke = 0.4) +
+      theme_bw() +
+      theme(axis.title.x = element_text(size = 11, face = "bold", color = "black"),
+            axis.title.y = element_text(size = 11, face = "bold", color = "black"), 
+            axis.text.x = element_text(size = 6, face = "bold", color = "black", angle = 90),
+            axis.text.y = element_text(size = 7, face = "bold", color = "black")) + 
+      theme(plot.title = element_text(size = 11, hjust = 0.5, face = "bold")) +
+      labs(x = "Lines", y = "Safety-first index")
+  })
+  
   output$met_environments_out <- DT::renderDataTable(
     DT::datatable(button_met2()[[2]][[input$met2]]$environments,  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -231,13 +275,8 @@ mod_met_server <- function(input, output, session){
     DT::datatable(button_met2()[[2]][[input$met2]]$general,  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -245,13 +284,8 @@ mod_met_server <- function(input, output, session){
     DT::datatable(button_met2()[[2]][[input$met2]]$favorable,  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -259,13 +293,18 @@ mod_met_server <- function(input, output, session){
     DT::datatable(button_met2()[[2]][[input$met2]]$unfavorable,  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
+                  ),
+                  class = "display")
+  )
+  
+  output$met_reliability_out <- DT::renderDataTable(
+    DT::datatable(button_met2()[[8]],  
+                  extensions = 'Buttons',
+                  options = list(
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -274,13 +313,8 @@ mod_met_server <- function(input, output, session){
     DT::datatable({button_met2()[[3]]}, 
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )
@@ -301,13 +335,8 @@ mod_met_server <- function(input, output, session){
     DT::datatable(button_met2()[[6]][[1]],  
                   extensions = 'Buttons',
                   options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = TRUE,
-                    autoWidth = TRUE,
-                    ordering = TRUE,
-                    dom = 'tB',
-                    buttons = c('copy', 'csv', 'excel')
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
                   ),
                   class = "display")
   )

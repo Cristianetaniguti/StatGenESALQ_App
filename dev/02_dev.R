@@ -25,6 +25,8 @@ usethis::use_package( "psych" )
 usethis::use_package( "multtest" )
 usethis::use_package( "emmeans" )
 usethis::use_package( "MASS" )
+usethis::use_package( "scales" )
+
 
 ## Add modules ----
 ## Create a module infrastructure in R/
@@ -57,7 +59,7 @@ usethis::use_test( "app" )
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("StatGenESALQ")
+usethis::use_vignette("StatGenESALQServer")
 devtools::build_vignettes()
 
 ## Code coverage ----

@@ -104,6 +104,7 @@ shapiro.test(mod1$residuals)
 shapiro.test(mod2$residuals)
 shapiro.test(mod3$residuals)
 shapiro.test(mod4$residuals)
+
 ### Independencia dos residuos 
 ### Usado para dados longitudinais e que seguem dritribuição normal
 ### medidas repetidas nas quais os n´ıveis das condi¸c˜oes de avalia¸c˜ao (ou simplesmente “condi¸c˜ao”) n˜ao podem ser aleatorizados entre si (por exemplo, o tempo ou profundidade).
@@ -160,6 +161,7 @@ outlier <- function(resid, alpha=0.05){
 (outlier(mod2$residuals, alpha = 0.05))
 (outlier(mod3$residuals, alpha = 0.05))
 (outlier(mod4$residuals, alpha = 0.05))
+
 ### analise de Multicolinearidade
 ### Indica uma correlação muito alta entre as variedades independentes 
 ### Indice de Correlação de pearson indica que acima de 0.8 ou 0.9 a depender do autor.

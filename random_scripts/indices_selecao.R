@@ -37,7 +37,7 @@ df_milho$gen <- as.factor(df_milho$gen)
 
 df_feijao <- df_feijao %>% mutate(local = as.factor(local),
                                   gen = as.factor(gen),
-                                  block = as.factor(block))
+                                  block = as.factor(block)) %>% filter(local == "CA1ES")
 
 str(df_feijao)
 
@@ -79,7 +79,16 @@ results_milho <-analysis_fixed_effects(df, design = "lattice", multi_env = T)
 df <- df_feijao %>% filter(local %in% c("Local1","Local2"))%>% select(c(1:3,"rend"))
 head(df)
 
-results_feijao <-analysis_fixed_effects(df, design = "DBC", multi_env = T)
+results_feijao <-analysis_fixed_effects(df_feijao, design = "DBC", multi_env = F)
+
+elston_index(results_feijao$adjusted_means, 
+             k = as.character(rep(1,length(colnames(results_feijao$adjusted_means)[-1]))))
+
+mulamba_index(results_feijao$adjusted_means, 
+              weights = as.character(rep(1,length(colnames(results_feijao$adjusted_means)[-1]))))
+
+smith_hazel(results_feijao$adjusted_means, 
+            )
 
 # Com médias ajustadas
 #y = L + G + e
@@ -100,7 +109,7 @@ elston_index(df = results_milho$adjusted_means, increasing = increasing)
 
 mulamba_index(df_emm, increasing = increasing)
 
-smith_hazel(results_milho$adjusted_means, 
+smith_hazel(adj.means = results_milho$adjusted_means, 
             cvf = results_milho$phenotypic_covariance, 
             cvg = results_milho$genetic_covariance)
 

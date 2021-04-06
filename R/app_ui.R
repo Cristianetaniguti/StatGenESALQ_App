@@ -21,7 +21,7 @@ app_ui <- function(request) {
                    menuSubItem("Selection indices", tabName = "indices", icon = icon("crosshairs"))
                    ),
           menuItem("Multi environment", tabName = "multi", icon = icon("circle"),
-                   menuSubItem("Assumptions test", tabName = "METassumptionsTest", icon = icon("crosshairs")),
+                   #menuSubItem("Assumptions test", tabName = "METassumptionsTest", icon = icon("crosshairs")),
                    menuSubItem("Selection indices", tabName = "METindices", icon = icon("crosshairs")),
                    menuSubItem("Stability analysis", tabName = "MET_metan", icon = icon("crosshairs")),
                    menuSubItem("Mixed models", tabName = "mix_midel", icon = icon("crosshairs"))
@@ -105,7 +105,7 @@ app_ui <- function(request) {
         tabItems(
           # First tab content
           tabItem(tabName = "about",
-                  includeMarkdown(system.file("ext", "about.Rmd", package = "StatGenESALQ"))
+                  includeMarkdown(system.file("ext", "about.Rmd", package = "StatGenESALQServer"))
           ),
           tabItem(tabName = "assumptionsTest",
                   mod_assumptionsTest_ui("assumptionsTest_ui_1")
@@ -113,9 +113,9 @@ app_ui <- function(request) {
           tabItem(tabName = "indices",
                   mod_indices_ui("indices_ui_1")
           ),
-          tabItem(tabName = "METassumptionsTest",
-                  mod_METassumptionsTest_ui("METassumptionsTest_ui_1")
-          ),
+          # tabItem(tabName = "METassumptionsTest",
+          #         mod_METassumptionsTest_ui("METassumptionsTest_ui_1")
+          # ),
           tabItem(tabName = "METindices",
                   mod_METindices_ui("METindices_ui_1")
           ),
@@ -146,7 +146,7 @@ golem_add_external_resources <- function(){
     favicon(),
     bundle_resources(
       path = app_sys('app/www'),
-      app_title = 'StatGenESALQ'
+      app_title = 'StatGenESALQServer'
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert() 

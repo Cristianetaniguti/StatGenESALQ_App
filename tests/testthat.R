@@ -1,4 +1,4 @@
 library(testthat)
-library(StatGenESALQ)
+library(StatGenESALQServer)
 
-test_check("StatGenESALQ")
+test_check("StatGenESALQServer")

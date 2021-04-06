@@ -11,7 +11,7 @@ app_server <- function( input, output, session ) {
                  Camila = "pFfPpa&85",
                  Wellingson = "6V1VTUy^#",
                  Augusto = "S9rFy8^Z8",
-                 Epagri = "Oq%RnT399"# committee
+                 Epagri = "Oq%RnT399"
   ) # lab member
   
   credentials <- data.frame(
@@ -35,7 +35,7 @@ app_server <- function( input, output, session ) {
   
   callModule(mod_assumptionsTest_server, "assumptionsTest_ui_1")
   callModule(mod_indices_server, "indices_ui_1")
-  callModule(mod_METassumptionsTest_server, "METassumptionsTest_ui_1")
+  #callModule(mod_METassumptionsTest_server, "METassumptionsTest_ui_1")
   callModule(mod_METindices_server, "METindices_ui_1")
   callModule(mod_met_server, "met_ui_1")
 }
