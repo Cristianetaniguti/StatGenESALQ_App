@@ -38,4 +38,5 @@ app_server <- function( input, output, session ) {
   #callModule(mod_METassumptionsTest_server, "METassumptionsTest_ui_1")
   callModule(mod_METindices_server, "METindices_ui_1")
   callModule(mod_met_server, "met_ui_1")
+  callModule(mod_MixedModel_server, "MixedModel_ui_1")
 }

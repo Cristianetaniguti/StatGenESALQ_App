@@ -4,7 +4,17 @@
 # Library
 library(sommer)
 library(dplyr)
+
+install.packages("doBy")
+install.packages("regress")
+install.packages("igraph")
+install.packages("qtl")
+BiocManager::install("snpStats")
+install.packages("LDheatmap")
+
+install.packages("synbreed",repos="http://r-forge.r-project.org", dependencies = T)
 library(synbreed)
+
 library(AGHmatrix)
 library(emmeans)
 

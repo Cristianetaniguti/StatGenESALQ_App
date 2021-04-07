@@ -10,7 +10,7 @@
 mod_indices_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fluidRow(style = "height:6000px",
+    fluidRow(style = "height:8000px",
              box(width = 12, 
                  p("Here you can obtain the variance/covariance matrix, herdability, selection gain and 
                    selection indices for Randomized complete block and 
@@ -280,121 +280,118 @@ mod_indices_server <- function(input, output, session){
     } else {
       k <- unlist(strsplit(input$k, ","))
       if(length(k) != length(colnames(button_indice2()$adjusted_means)[-1]))
-        safeError(stop("You must provide a minimum/maximum value for every evaluated trait.
+        stop(safeError(paste0("You must provide a minimum/maximum value for every evaluated trait.
                        You provided ", length(k), " values and ", length(colnames(button_indice2()$adjusted_means)[-1]),
-                  " are required."))
+                              " are required.")))
     }
     if(input$increasing == "Ex: alt, fert"){
       increasing <- NULL
     } else {
       increasing <- unlist(strsplit(input$increasing, ","))
     }
-    str(increasing)
-    str(k)
-    idx <-elston_index(button_indice2()$adjusted_means, k, increasing)
-    print(idx)
-    idx
+    
+    elston_index(button_indice2()$adjusted_means, k, increasing)
   })
-
-output$elston_out <- DT::renderDataTable(
-  DT::datatable(data.frame(button_indice3()),  
-                extensions = 'Buttons',
-                options = list(
-                  dom = 'Bfrtlp',
-                  buttons = c('copy', 'csv', 'excel', 'pdf')
-                ),
-                class = "display")
-)
-
-button_indice4 <- eventReactive(input$mulamba_button, {
-  if(input$weights == "Ex: 1,1,2"){
-    weights <- NULL
-  } else {
-    weights <- unlist(strsplit(input$weights, ","))
-    if(length(weights) != length(colnames(button_indice2()$adjusted_means)[-1]))
-      safeError(stop("You must provide a minimum/maximum value for every evaluated trait.
+  
+  output$elston_out <- DT::renderDataTable(
+    DT::datatable(data.frame(button_indice3()),  
+                  extensions = 'Buttons',
+                  options = list(
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
+                  ),
+                  class = "display")
+  )
+  
+  button_indice4 <- eventReactive(input$mulamba_button, {
+    if(input$weights == "Ex: 1,1,2"){
+      weights <- NULL
+    } else {
+      weights <- unlist(strsplit(input$weights, ","))
+      if(length(weights) != length(colnames(button_indice2()$adjusted_means)[-1]))
+        stop(safeError(paste0("You must provide a minimum/maximum value for every evaluated trait.
                        You provided ", length(weights), " values and ", length(colnames(button_indice2()$adjusted_means)[-1]),
-                " are required."))
-  }
+                              " are required.")))
+    }
+    
+    if(input$increasing == "Ex: alt, fert"){
+      increasing <- NULL
+    } else {
+      increasing <- unlist(strsplit(input$increasing, ","))
+    }
+    mulamba_index(button_indice2()$adjusted_means, weights = weights, increasing = increasing)
+  })
   
-  if(input$increasing == "Ex: alt, fert"){
-    increasing <- NULL
-  } else {
-    increasing <- unlist(strsplit(input$increasing, ","))
-  }
-  mulamba_index(button_indice2()$adjusted_means, weights = weights, increasing = increasing)
-})
-
-output$mulamba_out <- DT::renderDataTable(
-  DT::datatable(data.frame(button_indice4()),  
-                extensions = 'Buttons',
-                options = list(
-                  dom = 'Bfrtlp',
-                  buttons = c('copy', 'csv', 'excel', 'pdf')
-                ),
-                class = "display")
-)
-
-button_indice5 <- eventReactive(input$smith_button, {
-  if(input$weights1 == "Ex: 1,1,2"){
-    weights <- NULL
-  } else {
-    weights <- unlist(strsplit(input$weights1, ","))
-    if(length(weights) != length(colnames(button_indice2()$adjusted_means)[-1]))
-      safeError(stop("You must provide a minimum/maximum value for every evaluated trait.
+  output$mulamba_out <- DT::renderDataTable(
+    DT::datatable(data.frame(button_indice4()),  
+                  extensions = 'Buttons',
+                  options = list(
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
+                  ),
+                  class = "display")
+  )
+  
+  button_indice5 <- eventReactive(input$smith_button, {
+    if(input$weights1 == "Ex: 1,1,2"){
+      weights <- NULL
+    } else {
+      weights <- unlist(strsplit(input$weights1, ","))
+      if(length(weights) != length(colnames(button_indice2()$adjusted_means)[-1]))
+        stop(safeError(paste0("You must provide a minimum/maximum value for every evaluated trait.
                        You provided ", length(weights), " values and ", length(colnames(button_indice2()$adjusted_means)[-1]),
-                " are required."))
-  }
-  smith_hazel(adj.means = button_indice2()$adjusted_means,
-              cvg = button_indice2()$genetic_covariance, 
-              cvf = button_indice2()$phenotypic_covariance, weights = weights)
-})
-
-output$smith_out <- DT::renderDataTable(
-  DT::datatable(data.frame(button_indice5()),  
-                extensions = 'Buttons',
-                options = list(
-                  dom = 'Bfrtlp',
-                  buttons = c('copy', 'csv', 'excel', 'pdf')
-                ),
-                class = "display")
-)
-
-button_indice6 <- eventReactive(input$SG_button, {
-  pheno <- button_indice2()$adjusted_means[,c(1,which(colnames(button_indice2()$adjusted_means) == input$indice4))]
-  herdability <- button_indice2()$genetic_parameters[which(button_indice2()$genetic_parameters$pheno == input$indice4),"h2"]
-  result <- selection_gain(pheno = pheno, herdability,selected_geno = input$genotypes)
-  result
-})
-
-observe({
-  choices_trait <- colnames(button_indice2()$adjusted_means)[-1]
-  names(choices_trait) <- choices_trait
+                              " are required.")))
+    }
+    smith_hazel(adj.means = button_indice2()$adjusted_means,
+                cvg = button_indice2()$genetic_covariance, 
+                cvf = button_indice2()$phenotypic_covariance, weights = weights)
+  })
   
-  choices_geno <- unique(button_indice2()$adjusted_means[,1])
-  names(choices_geno) <- choices_geno
+  output$smith_out <- DT::renderDataTable(
+    DT::datatable(data.frame(button_indice5()),  
+                  extensions = 'Buttons',
+                  options = list(
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
+                  ),
+                  class = "display")
+  )
   
-  updateRadioButtons(session, "indice4",
-                     label="Choose the trait to be evaluated:",
-                     choices = choices_trait,
-                     selected = unlist(choices_trait)[1])
+  button_indice6 <- eventReactive(input$SG_button, {
+    pheno <- button_indice2()$adjusted_means[,c(1,which(colnames(button_indice2()$adjusted_means) == input$indice4))]
+    herdability <- button_indice2()$genetic_parameters[which(button_indice2()$genetic_parameters$pheno == input$indice4),"h2"]
+    result <- selection_gain(pheno = pheno, herdability,selected_geno = input$genotypes)
+    result
+  })
   
-  updateCheckboxGroupInput(session, "genotypes",
-                           label="Select the genotypes:",
-                           choices = choices_geno,
-                           selected = unlist(choices_geno)[1])
-})
-
-output$selection_gain_out <- DT::renderDataTable(
-  DT::datatable(data.frame(button_indice6()),  
-                extensions = 'Buttons',
-                options = list(
-                  dom = 'Bfrtlp',
-                  buttons = c('copy', 'csv', 'excel', 'pdf')
-                ),
-                class = "display")
-)
-
+  observe({
+    choices_trait <- colnames(button_indice2()$adjusted_means)[-1]
+    names(choices_trait) <- choices_trait
+    
+    choices_geno <- unique(button_indice2()$adjusted_means[,1])
+    names(choices_geno) <- choices_geno
+    
+    updateRadioButtons(session, "indice4",
+                       label="Choose the trait to be evaluated:",
+                       choices = choices_trait,
+                       selected = unlist(choices_trait)[1])
+    
+    updateCheckboxGroupInput(session, "genotypes",
+                             label="Select the genotypes:",
+                             choices = choices_geno,
+                             selected = unlist(choices_geno)[1])
+  })
+  
+  output$selection_gain_out <- DT::renderDataTable(
+    DT::datatable(data.frame(button_indice6()),  
+                  extensions = 'Buttons',
+                  options = list(
+                    dom = 'Bfrtlp',
+                    buttons = c('copy', 'csv', 'excel', 'pdf')
+                  ),
+                  class = "display")
+  )
+  
 }
 
 

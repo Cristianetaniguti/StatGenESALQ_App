@@ -26,6 +26,17 @@ usethis::use_package( "multtest" )
 usethis::use_package( "emmeans" )
 usethis::use_package( "MASS" )
 usethis::use_package( "scales" )
+usethis::use_package( "sommer" )
+usethis::use_package( "dplyr" )
+# usethis::use_package( "doBy" )
+# usethis::use_package( "regress" )
+# usethis::use_package( "igraph" )
+# usethis::use_package( "snpStats" )
+# usethis::use_package( "LDheatmap" )
+# usethis::use_package( "qtl" )
+# usethis::use_package( "synbreed" )
+usethis::use_package( "AGHmatrix" )
+
 
 
 ## Add modules ----
@@ -35,6 +46,7 @@ golem::add_module( name = "assumptionsTest" ) # Name of the module
 golem::add_module( name = "METassumptionsTest" ) # Name of the module
 golem::add_module( name = "indices" ) # Name of the module
 golem::add_module( name = "METindices" ) # Name of the module
+golem::add_module( name = "MixedModel" ) # Name of the module
 
 
 ## Add helper functions ----
