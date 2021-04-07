@@ -106,7 +106,7 @@ mod_MixedModel_server <- function(input, output, session){
     },
     # content is a function with argument file. content writes the plot to the device
     content = function(file) {
-      dat <- read.csv(system.file("ext","example_inputs/example_pedigree.csv", package = "StatGenESALQServer"))
+      dat <- read.csv(system.file("ext","example_inputs/example_pedigree.csv", package = "StatGenESALQServer"), row.names = 1, header = T)
       write.csv(dat, file = file)
     } 
   )
@@ -173,7 +173,7 @@ mod_MixedModel_server <- function(input, output, session){
         dat$local <- as.factor(dat$rep)
       }
       
-      if(!is.null(input$pedigree)) A <- read.csv(input$pedigree$datapath)
+      if(!is.null(input$pedigree)) A <- read.csv(input$pedigree$datapath, row.names = 1, header = T)
       
 
       mod <- mmer(fixed = as.formula(input$fixed), 

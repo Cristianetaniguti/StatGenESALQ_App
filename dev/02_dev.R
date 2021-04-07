@@ -28,13 +28,6 @@ usethis::use_package( "MASS" )
 usethis::use_package( "scales" )
 usethis::use_package( "sommer" )
 usethis::use_package( "dplyr" )
-# usethis::use_package( "doBy" )
-# usethis::use_package( "regress" )
-# usethis::use_package( "igraph" )
-# usethis::use_package( "snpStats" )
-# usethis::use_package( "LDheatmap" )
-# usethis::use_package( "qtl" )
-# usethis::use_package( "synbreed" )
 usethis::use_package( "AGHmatrix" )
 
 
