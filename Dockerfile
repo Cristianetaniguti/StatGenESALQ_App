@@ -31,14 +31,9 @@ RUN Rscript -e 'remotes::install_version("ggfortify",upgrade="never", version = 
 RUN Rscript -e 'remotes::install_version("lmtest",upgrade="never", version = "0.9-38")'
 RUN Rscript -e 'remotes::install_version("car",upgrade="never", version = "3.0-10")'
 RUN Rscript -e 'remotes::install_version("psych",upgrade="never", version = "2.0.12")'
-RUN Rscript -e 'install.packages("doBy")'
-RUN Rscript -e 'install.packages("regress")'
-RUN Rscript -e 'install.packages("igraph")'
-RUN Rscript -e 'install.packages("LDheatmap")'
-RUN Rscript -e 'install.packages("sommer")'
-RUN Rscript -e 'install.packages("AGHmatrix")'
-RUN Rscript -e 'install.packages("synbreed",repos="http://r-forge.r-project.org", dependencies = T)'
 RUN Rscript -e 'remotes::install_version("BiocManager",upgrade="never", version = "1.30.10")'
+RUN Rscript -e 'remotes::install_version("sommer",upgrade="never", version = "4.1.2")'
+RUN Rscript -e 'remotes::install_version("AGHmatrix",upgrade="never", version = "2.0.0")'
 RUN Rscript -e 'BiocManager::install("multtest")'
 
 COPY ./ /tmp/app/

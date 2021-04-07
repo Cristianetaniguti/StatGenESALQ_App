@@ -57,7 +57,8 @@ mod_MixedModel_ui <- function(id){
                  textInput(ns("fixed"), label = p("Fixed:"), value = "np ~ local"),
                  textInput(ns("random"), label = p("Random:"), value = "~ gen + local:block + local:gen"),
                  textInput(ns("rcov"), label = p("rcov:"), value = "~ units"), hr(),
-                 actionButton(ns("run_analysis"), "Run analysis",icon("refresh")), br(),
+                 actionButton(ns("run_analysis_stop"), "Run analysis",icon("refresh")), br(),
+                 tags$b("Warning: Run it locally to not overload our server.")
                  p("Expand the windows above to access the results")
              ), hr(),
              box(width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = T, status="info", title = "Results:",
