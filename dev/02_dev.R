@@ -31,7 +31,6 @@ usethis::use_package( "dplyr" )
 usethis::use_package( "AGHmatrix" )
 
 
-
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module( name = "met" ) # Name of the module
@@ -40,6 +39,7 @@ golem::add_module( name = "METassumptionsTest" ) # Name of the module
 golem::add_module( name = "indices" ) # Name of the module
 golem::add_module( name = "METindices" ) # Name of the module
 golem::add_module( name = "MixedModel" ) # Name of the module
+golem::add_module( name = "Covars" ) # Name of the module
 
 
 ## Add helper functions ----

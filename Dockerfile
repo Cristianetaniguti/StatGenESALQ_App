@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y  \
 
 RUN R -e 'install.packages("remotes")'
 RUN R -e 'remotes::install_github("r-lib/remotes", ref = "97bbf81")'
+RUN R -e 'remotes::install_github("gcostaneto/frGIS")'
 RUN Rscript -e 'remotes::install_version("glue",upgrade="never", version = "1.4.2")'
 RUN Rscript -e 'remotes::install_version("processx",upgrade="never", version = "3.4.4")'
 RUN Rscript -e 'remotes::install_version("htmltools",upgrade="never", version = "0.5.1.1")'
@@ -34,6 +35,9 @@ RUN Rscript -e 'remotes::install_version("psych",upgrade="never", version = "2.0
 RUN Rscript -e 'remotes::install_version("BiocManager",upgrade="never", version = "1.30.10")'
 RUN Rscript -e 'remotes::install_version("sommer",upgrade="never", version = "4.1.2")'
 RUN Rscript -e 'remotes::install_version("AGHmatrix",upgrade="never", version = "2.0.0")'
+RUN Rscript -e 'remotes::install_version("RgoogleMaps",upgrade="never", version = "1.4.5.3")'
+RUN Rscript -e 'remotes::install_version("maditr",upgrade="never", version = "0.7.4")'
+
 RUN Rscript -e 'BiocManager::install("multtest")'
 
 COPY ./ /tmp/app/

@@ -39,4 +39,5 @@ app_server <- function( input, output, session ) {
   callModule(mod_METindices_server, "METindices_ui_1")
   callModule(mod_met_server, "met_ui_1")
   callModule(mod_MixedModel_server, "MixedModel_ui_1")
+  callModule(mod_Covars_server, "Covars_ui_1")
 }
